@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бронирования</title>
+</head>
+<body>
+<header>
+    <div class="header-content">
+        <h1>Бронирование переговорок</h1>
+    </div>
+    <style>
+        /* Общие стили */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #0078d7;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-container a {
+            padding: 10px 15px;
+            background-color: #0078d7;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .form-container a:hover {
+            background-color: #005bb5;
+        }
+
+        .logout-button {
+            background-color: #d9534f;
+        }
+
+        .logout-button:hover {
+            background-color: #c9302c;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+        }
+
+        .centered-title {
+            text-align: center;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+
+        .real-estate-listing {
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .real-estate-listing h2 {
+            color: #333333;
+            margin: 0 0 10px 0;
+        }
+
+        .real-estate-listing img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .real-estate-listing p {
+            color: #555555;
+            margin: 5px 0;
+        }
+
+        .booking-info {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .duration {
+            font-weight: bold;
+            color: #333333;
+        }
+
+        .delete-booking {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #d9534f;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .delete-booking:hover {
+            background-color: #c9302c;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #0078d7;
+            color: white;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+    </style>
+</header>
+<div class="form-container">
+    <a href="/logout" class="button logout-button">Выйти</a>
+    <a href="/rooms" class="button profile-button">Бронирование</a>
+</div>
+<div class="container">
+    <h2 class="centered-title" th:text="'Привет, ' + ${username} + '. Вот твои бронирования:'">Your Bookings:</h2>
+
+    <div th:if="${bookingCards.isEmpty()}">
+        <p>Вы не забронировали ни одной переговорки.</p>
+    </div>
+
+    <div th:unless="${bookingCards.isEmpty()}">
+        <div th:each="card : ${bookingCards}" class="real-estate-listing" th:id="'object-' + ${card.meetingRoom.id}">
+            <h2 th:text="${card.meetingRoom.name}">Название</h2>
+            <img th:src="@{${card.meetingRoom.photoURL}}" alt="Изображение недвижимости">
+            <p th:text="'Площадь: ' + ${card.meetingRoom.area} + ' кв. м.'">Площадь</p>
+            <p th:text="'Макс. количество человек: ' + ${card.meetingRoom.capacity}">Макс. количество человек</p>
+            <p th:text="'Описание: ' + ${card.meetingRoom.description}">Описание</p>
+            <p th:text="'Скорость интернета: ' + ${card.meetingRoom.internetSpeed}+ 'Мбит/с'">Скорость интернета</p>
+            <p th:text="'Этаж: ' + ${card.meetingRoom.floor}">Этаж</p>
+
+            <div>
+                <h3>Информация о бронировании:</h3>
+                <div class="booking-info">
+                    <p class="duration">
+                        Начало: <span th:text="${card.booking.startDate}" th:attr="data-start-date=${card.booking.startDate}" class="formatted-date"></span>
+                        Конец: <span th:text="${card.booking.endDate}" th:attr="data-end-date=${card.booking.endDate}" class="formatted-date"></span>
+                    </p>
+                    <button class="delete-booking delete-button" th:data-booking-id="${card.booking.id}" th:data-object-id="${card.meetingRoom.id}" onclick="deleteBooking(this)">✖</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // Функция форматирования даты
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${hours}:${minutes} ${day}.${month}.${year}`;
+    }
+
+    // Функция расчёта продолжительности
+    function calculateDuration(startDateString, endDateString) {
+        const startDate = new Date(startDateString);
+        const endDate = new Date(endDateString);
+        const durationInMs = endDate - startDate;
+
+        if (isNaN(durationInMs) || durationInMs < 0) {
+            return 'Неверные даты';
+        }
+
+        const totalMinutes = Math.floor(durationInMs / (1000 * 60));
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+
+        if (hours > 0) {
+            return `${hours} ч ${minutes} мин`;
+        } else {
+            return `${minutes} мин`;
+        }
+    }
+
+    // Применяем форматирование и расчёт продолжительности
+    // Применяем форматирование и расчёт продолжительности
+    document.querySelectorAll('.real-estate-listing').forEach(function (listing) {
+    const startDateElem = listing.querySelector('[data-start-date]');
+    const endDateElem = listing.querySelector('[data-end-date]');
+    const durationElem = listing.querySelector('.duration'); // Находим элемент с классом duration
+
+    if (startDateElem && endDateElem && durationElem) {
+        const startDate = startDateElem.getAttribute('data-start-date');
+        const endDate = endDateElem.getAttribute('data-end-date');
+
+        // Форматируем даты
+        startDateElem.textContent = formatDate(startDate);
+        endDateElem.textContent = formatDate(endDate);
+
+        // Вычисляем и добавляем продолжительность
+        const duration = calculateDuration(startDate, endDate);
+        durationElem.textContent += `Продолжительность: ${duration}`; // Обновляем текст в элементе duration
+    }
+});
+
+
+    // Удаление бронирования
+    function deleteBooking(button) {
+        const bookingId = button.getAttribute('data-booking-id');
+        const url = `/api/booking/${bookingId}`;
+
+        fetch(url, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (response.ok) {
+                    const realEstateListing = button.closest('.real-estate-listing');
+                    if (realEstateListing) {
+                        realEstateListing.remove();
+                    }
+                    alert('Бронь успешно удалена.');
+                } else {
+                    alert('Ошибка при удалении бронирования. ID: ' + bookingId);
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при удалении брони. Попробуйте еще раз.');
+            });
+    }
+</script>
+<footer>
+    © Сенькевич Гаврил Дмитриевич, ИКБО-30-22
+</footer>
+</body>
+</html>

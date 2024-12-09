@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="/resources/images/logo.ico" type="image/x-icon">
+    <title>Вход</title>
+</head>
+<body>
+<header>
+    <h1>Бронирование переговорок</h1>
+    <style>
+        /* Общие стили */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #0078d7;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 400px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .container h2 {
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .btn4 {
+            display: inline-block;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #0078d7;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn4:hover {
+            background-color: #005bb5;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #842029;
+            padding: 10px;
+            border: 1px solid #f5c2c7;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        #aspec {
+            color: #0078d7;
+            text-decoration: none;
+        }
+
+        #aspec:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #0078d7;
+            color: white;
+            font-size: 12px;
+            position: relative;
+            margin-top: 20px;
+        }
+    </style>
+</header>
+<div class="container">
+    <form name="f" method="POST" th:action="@{/login}" th:object="${user}">
+        <div th:if="${param.error}" class="alert alert-error">
+            Неправильное имя или пароль!
+        </div>
+        <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+            <h2>Вход в аккаунт</h2>
+        </div>
+        <div class="form-group">
+            <label for="username">Имя пользователя:</label>
+            <input type="text" id="username" name="username"/>
+        </div>
+        <div class="form-group">
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password"/>
+        </div>
+        <div style="display: flex; justify-content: center; margin-top: 40px;">
+            <button class="btn4" type="submit">Вход</button>
+        </div>
+        <p>Аккаунт не создан?<br> <a id="aspec" href="/register">Регистрация</a></p>
+    </form>
+</div>
+<footer>
+    © Сенькевич Гаврил Дмитриевич, ИКБО-30-22
+</footer>
+</body>
+</html>

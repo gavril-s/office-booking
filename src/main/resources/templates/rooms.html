@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Бронирование переговорок</title>
+
+</head>
+<body>
+<header>
+    <div class="header-content">
+        <h1>Бронирование переговорок</h1>
+    </div>
+    <style>
+        /* Общие стили */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #0078d7;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h2 {
+            text-align: center;
+            color: #333333;
+        }
+
+        .form-container form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .form-container input, .form-container select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .form-container button {
+            grid-column: 1 / -1;
+            padding: 10px;
+            background-color: #0078d7;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .form-container button:hover {
+            background-color: #005bb5;
+        }
+
+        .form-container a {
+            display: inline-block;
+            margin: 10px 5px 0;
+            color: #0078d7;
+            text-decoration: none;
+        }
+
+        .form-container a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+        }
+
+        .real-estate-listing {
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .real-estate-listing h2 {
+            color: #333333;
+            margin: 0 0 10px 0;
+        }
+
+        .real-estate-listing img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .real-estate-listing p {
+            color: #555555;
+            margin: 5px 0;
+        }
+
+        .booking-details label {
+            display: inline-block;
+            font-weight: bold;
+            margin-right: 10px;
+            color: #333333;
+        }
+
+        .booking-details input,
+        .booking-details select {
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .booking-button {
+            padding: 10px 20px;
+            background-color: #0078d7;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .booking-button:hover {
+            background-color: #005bb5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #0078d7;
+            color: white;
+            font-size: 12px;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #0078d7;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+            text-align: center;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #005bb5;
+        }
+
+        .logout-button:hover {
+            background-color: #c9302c;
+        }
+
+        /* Изменение цвета текста для кнопок выхода и профиля */
+        .logout-button,
+        .profile-button {
+            color: white;
+        }
+
+        /* Уменьшение размеров изображений */
+        .real-estate-listing img {
+            max-width: 300px; /* Максимальная ширина изображения */
+            height: auto;    /* Сохранение пропорций */
+        }
+    </style>
+</header>
+<div class="form-container">
+    <h2>Фильтр</h2> <!-- Заголовок для формы фильтрации -->
+    <form th:action="@{/search}" method="get">
+        <input type="hidden" th:name="userId" th:value="${userId}">
+        <input type="text" name="name" placeholder="Название"> <!-- Добавлено поле для названия -->
+        <input type="text" name="description" placeholder="Описание"> <!-- Добавлено поле для описания -->
+        <input type="number" name="areaMin" placeholder="Мин Площадь">
+        <input type="number" name="areaMax" placeholder="Макс Площадь">
+        <input type="number" name="capacityMin" placeholder="Мин Количество Человек"> <!-- Добавлено поле для вместимости -->
+        <input type="number" name="capacityMax" placeholder="Макс Количество Человек"> <!-- Добавлено поле для вместимости -->
+        <input type="number" name="internetSpeedMin" placeholder="Мин Скорость Интернета"> <!-- Добавлено поле для скорости интернета -->
+        <input type="number" name="internetSpeedMax" placeholder="Макс Скорость Интернета"> <!-- Добавлено поле для скорости интернета -->
+        <input type="number" name="floorMin" placeholder="Мин Этаж">
+        <input type="number" name="floorMax" placeholder="Макс Этаж">
+        <select name="sortBy">
+            <option value="name">Сортировка по названию</option>
+            <option value="area">Сортировка по площади</option>
+            <option value="internetSpeed">Сортировка по скорости интернета</option>
+            <option value="capacity">Сортировка по количеству человек</option>
+            <option value="floor">Сортировка по этажу</option>
+        </select>
+        <select name="sortDirection">
+            <option value="asc">По возрастанию</option>
+            <option value="desc">По убыванию</option>
+        </select>
+        <button type="submit" class="button search">Поиск</button>
+    </form>
+
+    <a href="/logout" class="button logout-button" style="color: white;">Выход</a>
+    <a href="/account" class="button profile-button" style="color: white;">Личный кабинет</a>
+
+</div>
+
+
+
+<div class="container">
+    <div th:if="${meetingRooms.isEmpty()}">
+        <p>Нет доступных предложений недвижимости.</p>
+    </div>
+    <div th:unless="${meetingRooms.isEmpty()}">
+        <div th:each="meetingRooms : ${meetingRooms}" class="real-estate-listing">
+            <h2 th:text="${meetingRooms.name}">Название</h2>
+            <img th:src="@{${meetingRooms.photoURL}}" alt="Изображение недвижимости">
+            <p th:text="'Площадь: ' + ${meetingRooms.area} + ' кв. м.'">Площадь</p>
+            <p th:text="'Макс. количество человек: ' + ${meetingRooms.capacity}">Макс. количество человек:</p>
+            <p th:text="'Описание: ' + ${meetingRooms.description}">Описание</p>
+            <p th:text="'Скорость интернета: ' + ${meetingRooms.internetSpeed} + 'Мбит/с'">Скорость интернета</p>
+            <p th:text="'Этаж: ' + ${meetingRooms.floor}">Этаж</p>
+
+            <div class="booking-details">
+                <label th:for="'startDate-' + ${meetingRooms.id}">Дата начала:</label>
+                <input type="date" th:id="'startDate-' + ${meetingRooms.id}" th:name="'startDate-' + ${meetingRooms.id}" required>
+
+                <label th:for="'startHour-' + ${meetingRooms.id}">Часы:</label>
+                <select th:id="'startHour-' + ${meetingRooms.id}" th:name="'startHour-' + ${meetingRooms.id}" required>
+                    <!-- Часы от 8 до 20 -->
+                    <option value="08">8</option>
+                    <option value="09">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                </select>
+
+                <label th:for="'startMinute-' + ${meetingRooms.id}">Минуты:</label>
+                <select th:id="'startMinute-' + ${meetingRooms.id}" th:name="'startMinute-' + ${meetingRooms.id}" required>
+                    <option value="00">00</option>
+                    <option value="30">30</option>
+                </select>
+
+                <label th:for="'duration-' + ${meetingRooms.id}">Продолжительность:</label>
+                <select th:id="'duration-' + ${meetingRooms.id}" th:name="'duration-' + ${meetingRooms.id}" required>
+                    <option value="30">30 минут</option>
+                    <option value="60">1 час</option>
+                    <option value="90">1.5 часа</option>
+                    <option value="120">2 часа</option>
+                </select>
+            </div>
+
+
+            <button th:onclick="'addRequest(' + ${meetingRooms.id} + ', ' + ${userId} + ')'" class="booking-button">Забронировать</button>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function addRequest(objectId, userId) {
+        var startDateId = 'startDate-' + objectId;
+        var startHourId = 'startHour-' + objectId;
+        var startMinuteId = 'startMinute-' + objectId;
+        var durationId = 'duration-' + objectId;
+
+        // Получаем выбранные пользователем дату, часы и минуты
+        var startDate = document.getElementById(startDateId).value;
+        var startHour = document.getElementById(startHourId).value;
+        var startMinute = document.getElementById(startMinuteId).value;
+        var duration = parseInt(document.getElementById(durationId).value);
+
+        // Проверка на правильность введенных данных
+        if (!startDate || !startHour || !startMinute) {
+            alert('Пожалуйста, выберите дату, часы и минуты начала');
+            return;
+        }
+
+        // Конвертируем выбранные дату, часы и минуты в формат с временем
+        var startDateTime = new Date(startDate + 'T' + startHour + ':' + startMinute);
+
+        // Добавляем 3 часа к времени начала
+        startDateTime.setHours(startDateTime.getHours() + 3);
+
+        // Вычисляем дату окончания
+        var endDateTime = new Date(startDateTime.getTime() + duration * 60000); // добавляем продолжительность в миллисекундах
+
+        var requestData = {
+            userId: userId,
+            objectId: objectId,
+            startDate: startDateTime.toISOString(),
+            endDate: endDateTime.toISOString()
+        };
+
+        fetch('/api/booking', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Request added successfully');
+                alert("Забронировано");
+            } else {
+                console.error('Failed to add request');
+                alert("Не удалось забронировать");
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ne ok');
+        });
+    }
+</script>
+<footer>
+    © Сенькевич Гаврил Дмитриевич, ИКБО-30-22
+</footer>
+</body>
+</html>
